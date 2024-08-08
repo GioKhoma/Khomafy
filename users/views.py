@@ -8,6 +8,9 @@ from rest_framework.permissions import IsAuthenticated
 from .models import User
 from django.contrib.auth import authenticate
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+import os
 
 
 class RegisterAPIView(APIView):
@@ -23,7 +26,7 @@ class LoginAPIView(APIView):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             response = {
-                "username": {
+                "email": {
                     "detail": "User Does not exist!"
                 }
             }
@@ -49,13 +52,35 @@ class LogoutAPIView(APIView):
         return Response({'success': True, 'detail': "Logged out successfully!"}, status=status.HTTP_200_OK)
 
 
-class UserView(generics.ListAPIView):
+class CurrentUserView(generics.RetrieveUpdateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
+    def get_object(self):
+        return self.request.user
+
+
+# class RequestPasswordReset(generics.GenericAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = ResetPasswordRequestSerializer
+#
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         email = request.data['email']
+#         user = User.objects.filter(email__iexact=email).first()
+#
+#         if user:
+#             token_generator = PasswordResetTokenGenerator()
+#             token = token_generator.make_token(user)
+#             reset = PasswordReset(email=email, token=token)
+#             reset.save()
+#
+#             reset_url = f"{os.environ['PASSWORD_RESET_BASE_URL']}/{token}"
+#
+#             return Response({'success': 'We have sent you a link to reset your password!'}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({'error': 'User with credentials not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ProfilesView(generics.ListAPIView):

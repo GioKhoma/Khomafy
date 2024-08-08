@@ -5,16 +5,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'email', 'password']
-#
-#     def create(self, validated_data):
-#         user = User.objects.create_user(**validated_data)
-#         return user
-
-
 class UserLoginSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     email = serializers.EmailField(read_only=True)
@@ -57,4 +47,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'email']
+
+
+# class ResetPasswordRequestSerializer(serializers.Serializer):
+#     email = serializers.EmailField(required=True)
+
+
 

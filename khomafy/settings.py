@@ -40,8 +40,10 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_rest_passwordreset',
     'drf_yasg',
     'users',
+    'khomafy_app',
 ]
 
 MIDDLEWARE = [
