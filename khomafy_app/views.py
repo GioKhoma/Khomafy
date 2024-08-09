@@ -23,3 +23,9 @@ class PlaylistListView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [IsAuthenticated]
+
+
+class PlaylistDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [IsAuthenticated]
